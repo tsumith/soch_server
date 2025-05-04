@@ -32,13 +32,14 @@ app.get('/', (req, res) => {
 app.post('/save-token', async (req, res) => {
 
     try {
-        const { token } = req.body;
-        const newToken = new FCMToken({ token });
-        const savedToken = await newToken.save();
 
 
-        console.log('Received token:', savedToken);
-        res.send("token received");
+        const existingToken = await FCMToken.findOne({ token });
+        if (!existingToken) {
+            const { token } = req.body;
+            const newToken = new FCMToken({ token });
+            await newToken.save();
+        }
     } catch (error) {
         console.error('Error saving message:', error);
         res.status(500).json({ error: 'Internal server error' });

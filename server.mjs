@@ -1,17 +1,17 @@
 import express, { json } from 'express';
 import admin from 'firebase-admin';
-import serviceAccount from './config/serviceAccoutKey.json' assert { type: 'json' };
 import cors from 'cors';
 import mongoose from 'mongoose';
 import FCMToken from './models/token.mjs';
 import dotenv from 'dotenv';
 dotenv.config({ path: './config/.env' });
 const databaseUrl = process.env.MONGODB_URI;
+const serviceAccountBase64 = process.env.SERVICE_ACCOUNT_BASE64;
+const serviceAccountJson = JSON.parse(Buffer.from(serviceAccountBase64, 'base64').toString('utf-8'));
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccountJson),
 });
 console.log('Firebase Admin SDK initialized!');
-console.log('Database URL:', databaseUrl);
 dbconnect();
 async function dbconnect() {
     try {

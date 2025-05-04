@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 app.post('/save-token', async (req, res) => {
-
+    const { token } = req.body;
     try {
 
         const existingToken = await FCMToken.findOne({ token });

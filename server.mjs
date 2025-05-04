@@ -67,7 +67,6 @@ const sendNotificationToAll = async (title, msg) => {
         };
 
         // Send the notification
-        console.log(admin.messaging);
         const response = await admin.messaging().sendEachForMulticast(message);
 
         console.log(response.successCount + ' messages were sent successfully');
@@ -78,7 +77,8 @@ const sendNotificationToAll = async (title, msg) => {
 
 app.post("/triggerNotify", async (req, res) => {
     const { title, msg } = req.body;
-    console.log("notification triggerred ! ");
+    console.log("notification triggerred ! " + title + " " + msg);
+
     await sendNotificationToAll(title, msg);
 });
 

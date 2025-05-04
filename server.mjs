@@ -33,12 +33,15 @@ app.post('/save-token', async (req, res) => {
 
     try {
 
-
         const existingToken = await FCMToken.findOne({ token });
-        if (!existingToken) {
-            const { token } = req.body;
+        if (existingToken) {
+            console.log('Token already exists:', token);
+            return res.status(200).json({ message: 'Token already exists.' });
+        } else {
             const newToken = new FCMToken({ token });
-            await newToken.save();
+            const savedToken = await newToken.save();
+            console.log('New token saved:', savedToken);
+            return res.status(201).json({ message: 'Token saved successfully.', token: savedToken });
         }
     } catch (error) {
         console.error('Error saving message:', error);

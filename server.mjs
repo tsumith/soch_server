@@ -51,7 +51,7 @@ app.post('/save-token', async (req, res) => {
 
 
 
-const sendNotificationToAll = async () => {
+const sendNotificationToAll = async (title, body) => {
     try {
         // Retrieve all stored FCM tokens
         const tokens = await FCMToken.find();
@@ -60,8 +60,8 @@ const sendNotificationToAll = async () => {
 
         const message = {
             notification: {
-                title: 'soch alert',
-                body: 'greeting from team soch!',
+                title: title,
+                body: body,
             },
             tokens: tokenList, // List of tokens
         };
@@ -76,9 +76,10 @@ const sendNotificationToAll = async () => {
     }
 }
 
-app.get("/triggerNotify", async (req, res) => {
+app.post("/triggerNotify", async (req, res) => {
+    const { title, body } = req.body;
     console.log("notification triggerred ! ");
-    await sendNotificationToAll();
+    await sendNotificationToAll(title, body);
 });
 
 
